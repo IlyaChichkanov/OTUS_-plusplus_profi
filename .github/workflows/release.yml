@@ -15,6 +15,7 @@ jobs:
   build:
     # the environment (latest version of ubuntu in this case)
     runs-on: ubuntu-latest
+    permissions: write-all
     # the list of the steps (will be executed one after another)
     steps:
       # uses - use the already written action (in this case, download current repository to the local machine)
@@ -35,7 +36,6 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        permissions: write-all
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
