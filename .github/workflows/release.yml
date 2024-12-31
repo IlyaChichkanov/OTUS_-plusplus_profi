@@ -37,7 +37,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: vector_editor-0.0.${{ github.run_number }}-Linux.deb
+          name: helloworld-0.0.${{ github.run_number }}-Linux.deb
 
       - name: Release
         env:
@@ -45,7 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            vector_editor-0.0.${{ github.run_number }}-Linux.deb
+            helloworld-0.0.${{ github.run_number }}-Linux.deb
           tag_name: "${{ github.run_number }}"
           name: "Release ${{ github.run_number }}: ${{ github.event.head_commit.message }}"
           token: ${{ secrets.GITHUB_TOKEN }}
