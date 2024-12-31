@@ -33,19 +33,4 @@ jobs:
           path: ./01-homework/build/helloworld-0.0.${{ github.run_number }}-Linux.deb
 
      
-      # Release
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: helloworld-0.0.${{ github.run_number }}-Linux.deb
-
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            helloworld-0.0.${{ github.run_number }}-Linux.deb
-          tag_name: "${{ github.run_number }}"
-          name: "Release ${{ github.run_number }}: ${{ github.event.head_commit.message }}"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      
