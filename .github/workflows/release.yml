@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: debian_package
-          path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
+          path: .home1/otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
   release:
     needs: build
     # run the job only if the head commit contains the word "--release"
