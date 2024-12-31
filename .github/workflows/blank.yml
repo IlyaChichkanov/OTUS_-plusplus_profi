@@ -1,0 +1,52 @@
+name: "C++ CI"
+
+on:
+  push:
+    branches:
+      - main
+      - testing
+      - feature/github_actions
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    permissions: write-all
+    steps:
+      # 01-homework
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Build
+        run: |
+          cd ./01-homework
+          sudo apt-get update && sudo apt-get install cmake libboost-test-dev -y
+          mkdir -p build && cd build/
+          cmake -DPATCH_VERSION=${{ github.run_number }} ../
+          cmake --build .
+          cmake --build . --target test
+          cmake --build . --target package
+          cd ..
+      - name: Save built artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: helloworld-0.0.${{ github.run_number }}-Linux.deb
+          path: ./01-homework/build/helloworld-0.0.${{ github.run_number }}-Linux.deb
+
+     
+      # Release
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: vector_editor-0.0.${{ github.run_number }}-Linux.deb
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            vector_editor-0.0.${{ github.run_number }}-Linux.deb
+          tag_name: "${{ github.run_number }}"
+          name: "Release ${{ github.run_number }}: ${{ github.event.head_commit.message }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
