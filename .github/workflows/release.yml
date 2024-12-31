@@ -29,18 +29,6 @@ jobs:
           cmake --build .
           cmake --build . --target test
           cd ..
-      - name: Save built artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: debian_package
-          path: ./home1/otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
-  release:
-    needs: build
-    # run the job only if the head commit contains the word "--release"
-    if: contains(github.event.head_commit.message, '--release')
-    runs-on: ubuntu-latest
-    steps:
-      # complex step to create release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -66,5 +54,4 @@ jobs:
           asset_path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
           asset_name: otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
-          
-   
+    
