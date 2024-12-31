@@ -2,7 +2,7 @@ name: "C++ CI"
 
 on:
   push:
-    branches:
+    branches: 
       - main
       - testing
       - feature/github_actions
@@ -25,7 +25,6 @@ jobs:
           cmake -DPATCH_VERSION=${{ github.run_number }} ../
           cmake --build .
           cmake --build . --target test
-          cmake --build . --target package
           cd ..
       - name: Save built artifacts
         uses: actions/upload-artifact@v3
