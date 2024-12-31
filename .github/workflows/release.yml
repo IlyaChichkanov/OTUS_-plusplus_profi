@@ -5,7 +5,7 @@ name: "otus-cpp-professional CI"
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   # the name of the job
