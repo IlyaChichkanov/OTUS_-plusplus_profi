@@ -20,7 +20,8 @@ jobs:
         with:
           submodules: true
       # run - runs a system-specific command (in this case, shell-command because the system is ubuntu)
-       - run: |
+      - name: Build
+        run: |
           cd ./home1
           sudo apt-get update && sudo apt-get install cmake libboost-test-dev -y
           mkdir -p build && cd build/
@@ -28,7 +29,8 @@ jobs:
           cmake --build .
           cmake --build . --target test
           cd ..
-      - uses: actions/upload-artifact@v3
+      - name: Save built artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: debian_package
           path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
