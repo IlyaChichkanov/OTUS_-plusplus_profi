@@ -1,51 +1,66 @@
-name: "C++ CI"
+# name of the workflow to be displayed in the github interface
+name: "otus-cpp-professional CI"
 
+# criterias on which jobs are triggered
 on:
   push:
-    branches: 
+    branches:
       - main
-      - testing
-      - feature/github_actions
-  workflow_dispatch:
 
 jobs:
-  ci:
-    runs-on: ubuntu-20.04
-    permissions: write-all
+  # the name of the job
+  build:
+    # the environment (latest version of ubuntu in this case)
+    runs-on: ubuntu-latest
+    # the list of the steps (will be executed one after another)
     steps:
-      # 01-homework
-      - uses: actions/checkout@v3
+      # uses - use the already written action (in this case, download current repository to the local machine)
+      - uses: actions/checkout@v2
+        # with - allows to pass parameters to the action
         with:
           submodules: true
-      - name: Build
-        run: |
-          cd ./home1
-          sudo apt-get update && sudo apt-get install cmake libboost-test-dev -y
-          mkdir -p build && cd build/
-          cmake -DPATCH_VERSION=${{ github.run_number }} ../
-          cmake --build .
-          cmake --build . --target test
-          cd ..
-      - name: Save built artifacts
-        uses: actions/upload-artifact@v3
+      # run - runs a system-specific command (in this case, shell-command because the system is ubuntu)
+      - run: sudo apt-get update && sudo apt-get install libgtest-dev && sudo apt-get install cmake libboost-test-dev -y
+      - run : cd ./home1
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - run: cmake --build .
+      - run: cmake --build . --target test
+      - run: cmake --build . --target package
+      - uses: actions/upload-artifact@v2
         with:
-          name: helloworld-0.0.${{ github.run_number }}-Linux.deb
-          path: ./01-homework/build/helloworld-0.0.${{ github.run_number }}-Linux.deb
-
-     
-      # Release
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: vector_editor-0.0.${{ github.run_number }}-Linux.deb
-
-      - name: Release
+          name: debian_package
+          path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
+  release:
+    needs: build
+    # run the job only if the head commit contains the word "--release"
+    if: contains(github.event.head_commit.message, '--release')
+    runs-on: ubuntu-latest
+    steps:
+      # complex step to create release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: softprops/action-gh-release@v1
         with:
-          files: |
-            vector_editor-0.0.${{ github.run_number }}-Linux.deb
-          tag_name: "${{ github.run_number }}"
-          name: "Release ${{ github.run_number }}: ${{ github.event.head_commit.message }}"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.run_number }}
+          release_name: "Release v${{ github.run_number }}"
+          draft: false
+          prerelease: false
+      - uses: actions/download-artifact@v2
+        with:
+          name: debian_package
+      # step to upload the package to the github repository as a part of release
+      # (if we exclude this step the release will be created but without artifacts inside)
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
+          asset_content_type: application/vnd.debian.binary-package
+          
+  
