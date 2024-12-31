@@ -20,8 +20,8 @@ jobs:
         with:
           submodules: true
       # run - runs a system-specific command (in this case, shell-command because the system is ubuntu)
-      - run: sudo apt-get update && sudo apt-get install libgtest-dev && sudo apt-get install cmake libboost-test-dev -y
-      - run : cd ./home1
+      - run: sudo apt-get update && sudo apt-get install libgtest-dev
+      - run: cd ./home1
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
       - run: cmake --build . --target test
