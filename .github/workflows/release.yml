@@ -5,7 +5,7 @@ name: "otus-cpp-professional CI"
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   # the name of the job
@@ -15,7 +15,7 @@ jobs:
     # the list of the steps (will be executed one after another)
     steps:
       # uses - use the already written action (in this case, download current repository to the local machine)
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         # with - allows to pass parameters to the action
         with:
           submodules: true
@@ -26,7 +26,7 @@ jobs:
       - run: cmake --build .
       - run: cmake --build . --target test
       - run: cmake --build . --target package
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: debian_package
           path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
@@ -47,7 +47,7 @@ jobs:
           release_name: "Release v${{ github.run_number }}"
           draft: false
           prerelease: false
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: debian_package
       # step to upload the package to the github repository as a part of release
@@ -63,4 +63,4 @@ jobs:
           asset_name: otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
           
-  
+   
