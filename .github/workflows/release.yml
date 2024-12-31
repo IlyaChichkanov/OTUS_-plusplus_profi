@@ -4,6 +4,9 @@ name: "otus-cpp-professional CI"
 # criterias on which jobs are triggered
 on:
   push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
     branches:
       - main
 
@@ -31,7 +34,7 @@ jobs:
           cd ..
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v3
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -39,14 +42,14 @@ jobs:
           release_name: "Release v${{ github.run_number }}"
           draft: false
           prerelease: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v1
         with:
           name: debian_package
       # step to upload the package to the github repository as a part of release
       # (if we exclude this step the release will be created but without artifacts inside)
       - name: Upload Release Asset
         id: upload-release-asset
-        uses: actions/upload-release-asset@v4
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
