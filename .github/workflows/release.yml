@@ -32,7 +32,17 @@ jobs:
           cmake -DPATCH_VERSION=${{ github.run_number }} ../
           cmake --build .
           cmake --build . --target test
+          cmake --build . --target package
           cd ..
+
+
+  release:
+    needs: build
+    # run the job only if the head commit contains the word "--release"
+    if: contains(github.event.head_commit.message, '--release')
+    runs-on: ubuntu-latest
+    steps:
+      # complex step to create release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -43,7 +53,9 @@ jobs:
           release_name: "Release v${{ github.run_number }}"
           draft: false
           prerelease: false
-
+      - uses: actions/download-artifact@v2
+        with:
+          name: debian_package
       # step to upload the package to the github repository as a part of release
       # (if we exclude this step the release will be created but without artifacts inside)
       - name: Upload Release Asset
@@ -53,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./home1/otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
           asset_name: otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
     
