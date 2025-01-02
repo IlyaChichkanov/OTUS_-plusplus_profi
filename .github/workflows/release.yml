@@ -34,7 +34,10 @@ jobs:
           cmake --build . --target test
           cmake --build . --target package
           cd ..
-
+      - uses: actions/upload-artifact@v2
+        with:
+          name: debian_package
+          path: ./otus-cpp-professional-0.0.${{ github.run_number }}-Linux.deb
 
   release:
     needs: build
