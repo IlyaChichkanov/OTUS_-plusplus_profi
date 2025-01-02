@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.2)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
-
+if(DEFINED ENV{GITHUB_RUN_NUMBER})
+  set(PATCH_NUM $ENV{GITHUB_RUN_NUMBER})
+else()
+  set(PATCH_NUM 0)
+endif()
 project(helloworld VERSION ${PROJECT_VERSION})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
