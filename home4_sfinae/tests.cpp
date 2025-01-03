@@ -14,7 +14,7 @@ TEST(HW04_SFINAE, TestIntegral) {
         int8_t test1 = -1;
         EXPECT_NO_THROW(print_ip(test1, ss));
         EXPECT_EQ("255", ss.str());
-    }
+    } 
     
     {
         std::stringstream ss;
