@@ -27,7 +27,7 @@ jobs:
       - name: Build
         run: |
           cd ./home1
-          sudo apt-get update && sudo apt-get install cmake libboost-test-dev -y
+          sudo apt-get update && sudo apt-get install libgtest-dev
           mkdir -p build && cd build/
           cmake -DPATCH_VERSION=${{ github.run_number }} ../
           cmake --build .
