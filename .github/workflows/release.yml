@@ -34,6 +34,18 @@ jobs:
           cmake --build . --target test
           cmake --build . --target package
           cd ..
+          cd ./home2
+          mkdir -p build && cd build/
+          cmake -DPATCH_VERSION=${{ github.run_number }} ../
+          cmake --build .
+          cmake --build . --target package
+          cd ..
+          cd ./home3
+          mkdir -p build && cd build/
+          cmake -DPATCH_VERSION=${{ github.run_number }} ../
+          cmake --build .
+          cmake --build . --target package
+          cd ..
       # - name: Create Release
       #   id: create_release
       #   uses: actions/create-release@v1
@@ -55,18 +67,3 @@ jobs:
       #     asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
       #     asset_content_type: application/vnd.debian.binary-package
     
-        run: |
-          cd ./home2
-          mkdir -p build && cd build/
-          cmake -DPATCH_VERSION=${{ github.run_number }} ../
-          cmake --build .
-          cmake --build . --target package
-          cd ..
-
-        run: |
-          cd ./home3
-          mkdir -p build && cd build/
-          cmake -DPATCH_VERSION=${{ github.run_number }} ../
-          cmake --build .
-          cmake --build . --target package
-          cd ..
