@@ -1,11 +1,11 @@
 /**
  * @file print_ip.h
- * @author Maksim Halavaty (max.golovatyi@gmail.com)
+ * @author Ilia CHichkanov (chichkanff@gmail.com)
  * @brief The set of functions that allows to print ip address from integers, string, vector, list and tuple.
  * @version 0.1
  * @date 2022-09-18
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright (c) 2024
  * 
  */
 
@@ -19,6 +19,28 @@
 #include <vector>
 #include <type_traits>
 #include <string>
+
+template <typename T>
+concept is_list = std::is_same_v<
+	T,
+	std::list<typename T::value_type, typename T::allocator_type>>;
+
+template <typename T>
+concept is_vector = std::is_same_v<
+	T,
+	std::vector<typename T::value_type, typename T::allocator_type>>;
+
+
+
+template <typename T>
+concept is_vector_list = std::is_same_v<
+	T,
+	std::list<typename T::value_type, typename T::allocator_type>> ||
+    std::is_same_v<
+	T,
+	std::vector<typename T::value_type, typename T::allocator_type>> ;
+
+// template <is_list T>
 
 /**
  * @brief Specialization of a printing ip function for an integral type. Every byte of the number is printed as
@@ -36,6 +58,7 @@ void print_ip(T && ip, std::ostream & out = std::cout) {
         out << "." << int(pointer[i]);
     }
 }
+
 
 /**
  * @brief Specialization of a printing ip function for a std::string. Can also be called with all the types the std::string
@@ -58,6 +81,7 @@ void print_ip(T && ip, std::ostream & out = std::cout) {
  * @param ip std::vector or std::list, that represents an ip.
  * @param out A stream to output ip in.
  */
+// template <is_vector_list T>
 template <typename T, std::enable_if_t<
         std::is_same_v<std::list<typename std::decay_t<T>::value_type>, typename std::decay_t<T>>
         || std::is_same_v<std::vector<typename std::decay_t<T>::value_type>, typename std::decay_t<T>>, int> = 0>

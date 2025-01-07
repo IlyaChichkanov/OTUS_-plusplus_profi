@@ -1,19 +1,19 @@
-# name: Doxygen GitHub Pages Deploy Action
+name: Doxygen GitHub Pages Deploy Action
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       # To support dot command, because doxygen-github-pages-action doesn't install it
-#       - name: Install graphviz
-#         run: sudo apt-get install graphviz -y
-#         shell: bash
-#       # Action to generate gh pages
-#       - uses: DenverCoder1/doxygen-github-pages-action@v1
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # To support dot command, because doxygen-github-pages-action doesn't install it
+      - name: Install graphviz
+        run: sudo apt-get install graphviz -y
+        shell: bash
+      # Action to generate gh pages
+      - uses: DenverCoder1/doxygen-github-pages-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
