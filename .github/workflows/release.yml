@@ -33,13 +33,13 @@ jobs:
           cmake --build .
           cmake --build . --target test
           cmake --build . --target package
-          cd ..
+          cd ..//..
           cd ./home2
           mkdir -p build && cd build/
           cmake -DPATCH_VERSION=${{ github.run_number }} ../
           cmake --build .
           cmake --build . --target package
-          cd ..
+          cd ..//..
           cd ./home3
           mkdir -p build && cd build/
           cmake -DPATCH_VERSION=${{ github.run_number }} ../
