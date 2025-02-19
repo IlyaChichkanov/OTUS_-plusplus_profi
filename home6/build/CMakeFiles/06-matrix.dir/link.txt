@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic "CMakeFiles/06-matrix.dir/src/main.cpp.o" -o 06-matrix
